@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package Files;
+option csharp_namespace = "Shared.GrpcClientLibrary";
+
+enum statusCode {
+	OK = 0;
+	BAD_REQUEST = 1;
+}
+
+service FileService {
+	//rpc GetFileList(GetFileListRequest) returns (GetFileListResponse);
+	//rpc UploadFiles(UploadFilesRequest) returns (UploadsFilesResponse);
+	rpc ArchiveDirectory(ArchiveDirectoryRequest) returns (ArchiveDirectoryResponse);
+	rpc DeleteFile(DeleteFileRequest) returns (DeleteFileRespose);
+	//rpc Download(DownloadRequest) returns (DownloadRespose);	
+	rpc GetFileContent(GetFileContentRequest) returns (GetFileContentRespose);
+}
+
+message ArchiveDirectoryRequest {
+	string path = 1;
+}
+
+message ArchiveDirectoryResponse {
+	statusCode status = 1;
+	string message = 2;
+}
+
+message DeleteFileRequest {
+	string path = 1;
+}
+
+message DeleteFileRespose {
+	statusCode status = 1;
+	string message = 2;
+}
+
+message GetFileContentRequest {
+	string fileName = 1;
+}
+
+message GetFileContentRespose {
+	statusCode status = 1;
+	repeated string content = 2;
+}

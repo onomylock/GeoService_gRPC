@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+import "files.proto";
+option csharp_namespace = "Shared.GrpcClientLibrary";
+
+service SystemService {
+	rpc GetSystemStatus(GetSystemStatusRequest) returns (GetSystemStatusResponse);
+	rpc Echo(EchoRequest) returns (EchoResponse);
+	rpc Shutdown(ShutdownRequest) returns (ShutdownResponse);
+	rpc Version(VersionRequest) returns (VersionResponse);
+}
+
+message GetSystemStatusRequest {}
+
+message GetSystemStatusResponse {
+	Files.statusCode status = 1;
+	SystemStatus systemStatus = 2;
+}
+
+message SystemStatus {
+	double cpuLoad = 1;
+	int64 totalCores = 2;
+	int64 totalMemory = 3;
+	int64 availableMemory = 4;
+}
+
+message EchoRequest {
+	string message = 1;
+}
+
+message EchoResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}
+
+message ShutdownRequest {}
+
+message ShutdownResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}
+
+message VersionRequest {}
+
+message VersionResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}

@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+import "files.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+
+option csharp_namespace = "Shared.GrpcClientLibrary";
+
+service TaskService {
+	//add request
+	rpc StopTask(StopTaskRequest) returns (StopTaskResponse);
+	rpc GetListTask(GetListTaskRequest) returns (GetListTaskResponse);
+	rpc AwakeStatus(AwakeStatusRequest) returns (AwakeStatusResponse);
+	rpc RunningTusksCount(RunningTusksCountRequest) returns (RunningTusksCountResponse);
+	rpc ClearFolder(ClearFolderRequest) returns (ClearFolderResponse);
+}
+
+message StopTaskRequest {
+	int64 id = 1;
+}
+
+message StopTaskResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}
+
+message GetListTaskRequest {
+	NullableId id = 1;
+}
+
+message GetListTaskResponse {
+	Files.statusCode status = 1;
+	repeated TaskDto tasks = 2;
+}
+
+message AwakeStatusRequest {}
+
+message AwakeStatusResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}
+
+message RunningTusksCountRequest {}
+
+message RunningTusksCountResponse {
+	Files.statusCode status = 1;
+	int32 count = 2;
+}
+
+message ClearFolderRequest {}
+
+message ClearFolderResponse {
+	Files.statusCode status = 1;
+	string message = 2;
+}
+
+message NullableId {
+	oneof kind {
+		google.protobuf.NullValue null = 1;
+		int64 id = 2;
+	}
+}
+
+message TaskDto {
+	int32 size = 1;
+	int32 failedToSend = 2;
+	int64 id = 3;
+	TaskType type = 4;
+	TaskStatus status = 5;
+	string executable = 6;
+	repeated string arguments = 7;
+	repeated Dependency dependencies = 8;
+	repeated Dependency results = 9;
+	repeated Dependency resultFileLists = 10;
+	int32 exitCode = 11;
+	repeated string failedExecutionServers = 12;
+	string name = 13; 
+	google.protobuf.Timestamp startDate = 14;
+}
+
+enum TaskType {
+	EMPTY = 0;
+    PROCESS = 1;
+}
+
+enum TaskStatus {
+	WAITING = 0;
+    RUNNING = 1;
+    COMPLETED = 2;
+    ARCHIVED = 3;
+    NOTAPPROVED = 4;
+}
+
+message Dependency {
+	string serverName = 1;
+	string clientName = 2;
+}
