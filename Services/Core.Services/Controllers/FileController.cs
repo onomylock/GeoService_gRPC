@@ -1,29 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Application.Commands.FileCommands;
+using Core.Application.Files.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace Core.Services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : ControllerBase
+    public class FileController(IMediator mediator) : ControllerBase
     {
-        //[HttpPost("upload")]
-        //public async Task<IActionResult> Upload([FromBody] string path, IFormFile[] files)
-        //{
+        private readonly IMediator _mediator = mediator;
 
-        //}
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload([FromBody] UploadCommand command) => Ok(await _mediator.Send(command));
 
-        //[HttpGet("download")]
-        //public async Task<IActionResult> Download([FromQuery] string fileName)
-        //{
+        [HttpGet("download")]
+        public async Task<IActionResult> Download([FromQuery] DownloadQuery query) => Ok(await _mediator.Send(query));
 
-        //}
-
-        //[HttpGet("list")]
-        //public async Task<IActionResult> List([FromQuery] string path)
-        //{
-
-        //}
+        [HttpGet("list")]
+        public async Task<IActionResult> List([FromQuery] FileListQuery query) => Ok(await _mediator.Send(query));
     }
 }
